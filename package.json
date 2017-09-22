@@ -1,10 +1,11 @@
 {
   "name": "wxmp-auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "doc": "jsdoc2md index.js > API.md"
   },
   "keywords": [
     "wechat"
@@ -17,7 +18,8 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "eslint-config-egg": "^5.1.1"
+    "eslint-config-egg": "^5.1.1",
+    "jsdoc-to-markdown": "^3.0.0"
   },
   "homepage": "https://github.com/binsee/wxmp-auth#readme",
   "repository": {

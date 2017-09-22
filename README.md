@@ -2,14 +2,10 @@
 
 封装微信公众平台的网页授权逻辑，简化开发网页授权的步骤。
 
-## 使用
+## 调用
 
-提供以下方法：
+点击查看 [API文档](API.md)
 
-- getAuthUrl()
-- getToken()
-- getUserinfo()
-- refreshToken()
-- checkAccessToken()
 
-## 其他
+
+

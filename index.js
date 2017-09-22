@@ -11,6 +11,14 @@ const uuid = require('uuid')
 const request = require('request')
 
 
+/**
+ * 检查url是否合法
+ *
+ * @param {string} url 要检查的url
+ * @returns {boolean} 是否为合法url
+ * @ignore
+ */
+
 function checkUrl(url) {
   return /^(http|https):\/\//.test(url)
 }
@@ -30,16 +38,20 @@ function checkUrl(url) {
  * - snsapi_base 静默授权，不弹授权页面，直接跳转，仅获得openid
  * - snsapi_userinfo 显式授权，弹出授权页面，获得用户更多信息
  * 【可省略】默认使用静默授权
- * @returns {any} 返回拼装结果
+ * @returns {any} 成功则返回拼装结果，失败返回`false`
+ *
+ * ```javascript
  * {
  *    url: string,
  *    state: string,
  * }
+ * ```
  *
- * 参数  |  描述
+ * 字段  |  描述
  * ----- | -----
  * url   | 拼装完成的授权url，用户在微信中打开后进入授权流程
  * state | 本次请求的访问标识，用于区分不同用户
+ *
  */
 
 function getAuthUrl(appid, redirect_uri, state, scope) {
@@ -69,6 +81,8 @@ function getAuthUrl(appid, redirect_uri, state, scope) {
  * @param {string} secret 公众号的appsecret
  * @returns {Promise} 返回一个Promise
  * 请求成功则Promise会返回一个Object如下：
+ *
+ * ```javascript
  * {
  *   access_token: 'ACCESS_TOKEN',
  *   expires_in: 7200,
@@ -77,12 +91,13 @@ function getAuthUrl(appid, redirect_uri, state, scope) {
  *   scope: 'SCOPE',
  *   state: string
  * }
+ * ```
  *
- *     参数      |     描述
+ * 字段      |     描述
  * ------------- | -------------
  * access_token  | 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
  * expires_in    | access_token接口调用凭证超时时间，单位（秒）
- * refresh_token | 用户刷新access_token
+ * refresh_token | 刷新凭证
  * openid        | 用户唯一标识，请注意，在未关注公众号时，用户访问公众号的网页，也会产生一个用户和公众号唯一的OpenID
  * scope         | 用户授权的作用域，使用逗号（,）分隔
  * state         | 本次访问请求标识
@@ -136,30 +151,35 @@ function getToken(appid, r_url, secret) {
 /**
  * 刷新token
  *
- * 由于access_token有效期较短，如果授权方式为 snsapi_userinfo，且想长期静默获取用户的信息，需要定期刷新token，以维持access_token与refresh_token的有效性
+ * 由于access_token有效期较短，如果授权方式为 snsapi_userinfo，且想长期静默获取用户的信息，需要定期刷新token，以维持access_token与refresh_token的有效性。
+ *
  * 备注：
  * - access_token 有效期为 7200秒
  * - refresh_token 有效期为 30天
  *
- * @param {string} appid
- * @param {string} refresh_token
+ * @param {string} appid  公众号appid
+ * @param {string} refresh_token 刷新凭证
  * @returns {Promise} 返回一个Promise
  * 请求成功则Promise会返回一个Object如下：
- * {
- *   access_token: 'ACCESS_TOKEN',  //访问token，有效期见expires_in
- *   expires_in: 7200,  //access_token的有效期，单位为秒
- *   refresh_token: 'REFRESH_TOKEN', //刷新token，有效期30天
- *   openid: 'OPENID',  //用户openid
- *   scope: 'SCOPE',  //用户授权作用域
- * }
  *
- *     参数      |     描述
+ * ```javascript
+ * {
+ *   access_token: 'ACCESS_TOKEN',
+ *   expires_in: 7200,
+ *   refresh_token: 'REFRESH_TOKEN',
+ *   openid: 'OPENID',
+ *   scope: 'SCOPE',
+ * }
+ * ```
+ *
+ * 字段      |     描述
  * ------------- | -------------
  * access_token  | 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
  * expires_in    | access_token接口调用凭证超时时间，单位（秒）
- * refresh_token | 用户刷新access_token
+ * refresh_token | 刷新凭证
  * openid        | 用户唯一标识，请注意，在未关注公众号时，用户访问公众号的网页，也会产生一个用户和公众号唯一的OpenID
  * scope         | 用户授权的作用域，使用逗号（,）分隔
+ *
  */
 
 function refreshToken(appid, refresh_token) {
@@ -198,9 +218,9 @@ function refreshToken(appid, refresh_token) {
 /**
  * 拉取用户详细
  *
- * 仅限授权作用域为 `snsapi_userinfo` 有效
+ * 仅限授权作用域为 `snsapi_userinfo` 有效。
  *
- * @param {string} access_token 用户授权得到访问token
+ * @param {string} access_token 网页授权接口调用凭证
  * @param {string} openid 用户openid
  * @param {string} lang 返回信息的语言版本
  * 【可省略】默认为 简体中文
@@ -209,6 +229,8 @@ function refreshToken(appid, refresh_token) {
  * - en 英语
  * @returns {Promise} 返回一个Promise
  * 请求成功则Promise会返回一个Object如下：
+ *
+ * ```javascript
  * {
  *   openid: 'OPENID',
  *   nickname: 'NICKNAME',
@@ -216,12 +238,13 @@ function refreshToken(appid, refresh_token) {
  *   province: 'PROVINCE',
  *   city: 'CITY',
  *   country: 'COUNTRY',
- *  headimgurl: 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46',
+ *   headimgurl: 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46',
  *   privilege: ['PRIVILEGE1', 'PRIVILEGE2'],
  *   unionid: 'o6_bmasdasdsad6_2sgVt7hMZOPfL',
  * }
+ * ```
  *
- *    字段    |   说明
+ * 字段    |   描述
  * ---------- | ---------
  * openid     | 用户的唯一标识
  * nickname   | 用户昵称
@@ -271,10 +294,11 @@ function getUserinfo(access_token, openid, lang) {
  * 如果授权作用域为 `snsapi_userinfo`，则拉取用户详细信息前可以先检查授权凭证是否有效。
  * 如果授权凭证已失效，可调用刷新凭证。
  *
- * @param {string} access_token 访问授权凭证
+ * @param {string} access_token 网页授权接口调用凭证
  * @param {string} openid 用户openid
  * @returns {Promise} 返回一个Promise
  * 请求成功则Promise返回一个boolean值，如果是true则凭证有效
+ *
  */
 
 function checkAccessToken(access_token, openid) {
@@ -302,7 +326,6 @@ function checkAccessToken(access_token, openid) {
     })
   })
 }
-
 
 module.exports = {
   getAuthUrl,
