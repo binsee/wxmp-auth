@@ -18,5 +18,20 @@
   },
   "devDependencies": {
     "eslint-config-egg": "^5.1.1"
-  }
+  },
+  "homepage": "https://github.com/binsee/wxmp-auth#readme",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/binsee/wxmp-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/binsee/wxmp-auth/issues"
+  },
+  "files": [
+    "CHANGELOG",
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "index.js"
+  ]
 }
