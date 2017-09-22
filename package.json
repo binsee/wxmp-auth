@@ -1,0 +1,22 @@
+{
+  "name": "wxmp-auth",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wechat"
+  ],
+  "author": "binsee",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.82.0",
+    "url": "^0.11.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint-config-egg": "^5.1.1"
+  }
+}
