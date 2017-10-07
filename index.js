@@ -62,8 +62,8 @@ function getAuthUrl(appid, redirect_uri, state, scope) {
   state = state || uuid.v1()
 
   url.searchParams.set('appid', appid)
-  url.searchParams.set('redirect_uri', encodeURIComponent(redirect_uri))
-  url.searchParams.set('scope', scope || 'snsapi_base ')
+  url.searchParams.set('redirect_uri', redirect_uri)
+  url.searchParams.set('scope', scope || 'snsapi_base')
   url.searchParams.set('state', state)
   return { url: url.toString(), state }
 }
